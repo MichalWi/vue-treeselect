@@ -1,5 +1,5 @@
 /*!
- * vue-treeselect v0.4.0 | (c) 2017-2020 Riophae Lee
+ * vue-treeselect v0.4.1 | (c) 2017-2021 Riophae Lee
  * Released under the MIT License.
  * https://vue-treeselect.js.org/
  */
@@ -563,6 +563,9 @@
 .vue-treeselect__option--highlight {
   background: #f5f5f5;
 }
+.vue-treeselect__option.clearfix::before {
+  content: unset;
+}
 .vue-treeselect--single .vue-treeselect__option--selected {
   background: #e3f2fd;
   font-weight: 600;
@@ -592,9 +595,6 @@
   width: 20px !important;
   float: left !important;
   cursor: pointer;
-}
-.vue-treeselect__option-arrow-placeholder {
-  display: none !important;
 }
 .vue-treeselect__option-arrow {
   display: inline-block;
