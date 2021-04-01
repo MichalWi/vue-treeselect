@@ -32,7 +32,7 @@
     },
 
     methods: {
-      renderOption(idParent) {
+      renderOption() {
         const { instance, node } = this
         const optionClass = {
           'vue-treeselect__option clearfix': true,
@@ -128,7 +128,7 @@
         // For leaf nodes, we render a placeholder to keep its label aligned to
         // branch nodes. Unless there is no branch nodes at all (a normal
         // non-tree select).
-        if (/*node.isLeaf && */instance.hasBranchNodes) {
+        if (instance.hasBranchNodes) {
           if (!arrowPlaceholder) arrowPlaceholder = (
             <div class="vue-treeselect__option-arrow-placeholder">&nbsp;</div>
           )

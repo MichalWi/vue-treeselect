@@ -777,6 +777,9 @@
 .vue-treeselect__option--highlight {
   background: @treeselect-option-bg-highlight;
 }
+.vue-treeselect__option.clearfix::before{
+  content: unset;
+}
 
 .vue-treeselect__option--selected {
   // note that these should override `.vue-treeselect__option--highlight`
@@ -790,10 +793,8 @@
   }
 }
 
-.vue-treeselect__option {
-  // Wiserskills change
-  position: relative;
-  // end change
+.vue-treeselect__option { 
+  position: relative; 
 }
 
 .vue-treeselect__option--hide {
@@ -818,7 +819,6 @@
 }
 .vue-treeselect__option-arrow-placeholder{
   // Wiserskills change
-  display: none !important;
   // end change
 }
 

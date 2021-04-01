@@ -1,6 +1,7 @@
+import fuzzysearch from 'fuzzysearch'
 import {
   warning,
-  onLeftClick, scrollIntoView,
+  onLeftClick,
   isNaN, isPromise, once,
   identity, constant, createMap,
   quickDiff, last as getLast, includes, find, removeFromArray,
@@ -14,7 +15,6 @@ import {
   ALL_CHILDREN, ALL_DESCENDANTS, LEAF_CHILDREN, LEAF_DESCENDANTS,
   ORDER_SELECTED, LEVEL, INDEX, INPUT_DEBOUNCE_DELAY,
 } from '../constants'
-import fuzzysearch from 'fuzzysearch'
 
 function sortValueByIndex(a, b) {
   let i = 0
@@ -52,7 +52,9 @@ function slugify(str) {
   str = str.toLowerCase()
 
   for (const pattern in map) {
-    str = str.replace(new RegExp(map[pattern], 'g'), pattern)
+    if (Object.prototype.hasOwnProperty.call(map, pattern)) {
+      str = str.replace(new RegExp(map[pattern], 'g'), pattern)
+    }
   }
   return str
 }
@@ -706,7 +708,7 @@ export default {
 
       // States of root options.
       rootOptionsStates: createAsyncOptionsStates(),
-
+      hasBranchNodes: 'undefined',
       localSearch: {
         // Has user entered any query to search local options?
         active: false,
@@ -828,13 +830,6 @@ export default {
       return typeof this.showCountOnSearch === 'boolean'
         ? this.showCountOnSearch
         : this.showCount
-    },
-    /**
-     * Is there any branch node?
-     * @type {boolean}
-     */
-    hasBranchNodes() {
-      return this.forest.normalizedOptions.some(rootNode => rootNode.isBranch)
     },
     shouldFlattenOptions() {
       return this.localSearch.active && this.flattenSearchResults
@@ -973,6 +968,7 @@ export default {
         //      of these nodes. (multi-select mode)
         //   3) Async search mode.
         this.fixSelectedNodeIds(this.internalValue)
+        this.hasBranchNodes = this.forest.normalizedOptions.some(rootNode => rootNode.isBranch)
       } else {
         this.forest.normalizedOptions = []
       }
@@ -1012,7 +1008,7 @@ export default {
       // When the real data is loaded, we'll override this fake node.
 
       const raw = this.extractNodeFromValue(id)
-      const label = this.enhancedNormalizer(raw).label || `${id} (unknown)`
+      const label = raw.label || `${id} (unknown)`
       const fallbackNode = {
         id,
         label,
@@ -1058,7 +1054,7 @@ export default {
         : this.value ? [ this.value ] : []
       const matched = find(
         valueArray,
-        node => node && this.enhancedNormalizer(node).id === id,
+        node => node && node.id === id,
       )
 
       return matched || defaultNode
@@ -1068,9 +1064,9 @@ export default {
       let nextSelectedNodeIds = []
 
       // istanbul ignore else
-      if (this.single || this.flat || this.disableBranchNodes || this.valueConsistsOf === ALL) {
+      if (this.single || this.disableBranchNodes || (this.valueConsistsOf === ALL && !this.flat)) {
         nextSelectedNodeIds = nodeIdListOfPrevValue
-      } else if (this.valueConsistsOf === BRANCH_PRIORITY) {
+      } else if (this.valueConsistsOf === BRANCH_PRIORITY || this.flat) {
         nodeIdListOfPrevValue.forEach(nodeId => {
           nextSelectedNodeIds.push(nodeId)
           const node = this.getNode(nodeId)
@@ -1089,7 +1085,7 @@ export default {
           if (!(node.parentNode.id in map)) map[node.parentNode.id] = node.parentNode.children.length
           if (--map[node.parentNode.id] === 0) queue.push(node.parentNode.id)
         }
-      } else if (this.valueConsistsOf === ALL_WITH_INDETERMINATE) {
+      } else if (this.flat || this.valueConsistsOf === ALL_WITH_INDETERMINATE) {
         const map = createMap()
         const queue = nodeIdListOfPrevValue.filter(nodeId => {
           const node = this.getNode(nodeId)
@@ -1401,7 +1397,7 @@ export default {
       return $menu && $menu.nodeName !== '#comment' ? $menu : null
     },
 
-    setCurrentHighlightedOption(node, scroll = true) {
+    setCurrentHighlightedOption(node) {
       const prev = this.menu.current
       if (prev != null && prev in this.forest.nodeMap) {
         this.forest.nodeMap[prev].isHighlighted = false
@@ -1409,34 +1405,10 @@ export default {
 
       this.menu.current = node.id
       node.isHighlighted = true
-
-      if (this.menu.isOpen && scroll) {
-        const scrollToOption = () => {
-          const $menu = this.getMenu()
-          const $option = $menu.querySelector(`.vue-treeselect__option[data-id="${node.id}"]`)
-          if ($option) scrollIntoView($menu, $option)
-        }
-
-        // In case `openMenu()` is just called and the menu is not rendered yet.
-        if (this.getMenu()) {
-          scrollToOption()
-        } else {
-          // istanbul ignore next
-          this.$nextTick(scrollToOption)
-        }
-      }
     },
 
-    resetHighlightedOptionWhenNecessary(forceReset = false) {
-      const { current } = this.menu
-
-      if (
-        forceReset || current == null ||
-        !(current in this.forest.nodeMap) ||
-        !this.shouldShowOptionInMenu(this.getNode(current))
-      ) {
-        this.highlightFirstOption()
-      }
+    resetHighlightedOptionWhenNecessary() {
+      return true
     },
 
     highlightFirstOption() {
@@ -1541,6 +1513,39 @@ export default {
         })
       }
       this.forest.checkedStateMap = checkedStateMap
+    },
+
+    selectInForest() {
+      const selectedNodeMap = createMap()
+      this.forest.selectedNodeIds.forEach(selectedNodeId => {
+        selectedNodeMap[selectedNodeId] = true
+      })
+      this.forest.selectedNodeMap = selectedNodeMap
+
+      if (this.multiple) {
+        this.selectedNodes.forEach(selectedNode => {
+          this.forest.checkedStateMap[selectedNode.id] = CHECKED
+
+          if (!this.flat && !this.disableBranchNodes) {
+            selectedNode.ancestors.forEach(ancestorNode => {
+              if (!this.isSelected(ancestorNode)) {
+                this.forest.checkedStateMap[ancestorNode.id] = INDETERMINATE
+              }
+            })
+          }
+        })
+      }
+    },
+
+    deselectInForest(deselectedNode) {
+      if (this.multiple) {
+        this.forest.checkedStateMap[deselectedNode.id] = UNCHECKED
+        this.traverseDescendantsDFS(deselectedNode, descendant => {
+          if (!descendant.isDisabled || this.allowSelectingDisabledDescendants) {
+            this.forest.checkedStateMap[descendant.id] = UNCHECKED
+          }
+        })
+      }
     },
 
     enhancedNormalizer(raw) {
@@ -1803,8 +1808,15 @@ export default {
       } else {
         this._deselectNode(node)
       }
-
-      this.buildForestState()
+      if (this.flat) {
+        if (nextState) {
+          this.selectInForest(node)
+        } else {
+          this.deselectInForest(node)
+        }
+      } else {
+        this.buildForestState()
+      }
 
       if (nextState) {
         this.$emit('select', node.raw, this.getInstanceId())
