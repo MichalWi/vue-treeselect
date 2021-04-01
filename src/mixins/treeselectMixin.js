@@ -1972,9 +1972,7 @@ export default {
     },
 
     restoreMenuScrollPosition() {
-      const $menu = this.getMenu()
-      // istanbul ignore else
-      if ($menu) $menu.scrollTop = this.menu.lastScrollPosition
+      return true
     },
   },
 
