@@ -1540,11 +1540,13 @@ export default {
     deselectInForest(deselectedNode) {
       if (this.multiple) {
         this.forest.checkedStateMap[deselectedNode.id] = UNCHECKED
-        this.traverseDescendantsDFS(deselectedNode, descendant => {
-          if (!descendant.isDisabled || this.allowSelectingDisabledDescendants) {
-            this.forest.checkedStateMap[descendant.id] = UNCHECKED
-          }
-        })
+        if (this.autoDeselectDescendants) {
+          this.traverseDescendantsDFS(deselectedNode, descendant => {
+            if (!descendant.isDisabled || this.allowSelectingDisabledDescendants) {
+              this.forest.checkedStateMap[descendant.id] = UNCHECKED
+            }
+          })
+        }
       }
     },
 
