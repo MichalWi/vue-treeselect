@@ -1,3 +1,6 @@
+# About this fork
+It foucses on performance for ~5000 element list, menu resizing and direction won't work
+
 # vue-treeselect
 [![npm](https://badgen.now.sh/npm/v/@riophae/vue-treeselect)](https://www.npmjs.com/package/@riophae/vue-treeselect) [![Build](https://badgen.now.sh/circleci/github/riophae/vue-treeselect)](https://circleci.com/gh/riophae/vue-treeselect/tree/master) [![Coverage](https://badgen.net/codecov/c/github/riophae/vue-treeselect)](https://codecov.io/gh/riophae/vue-treeselect?branch=master)
 ![npm monthly downloads](https://badgen.now.sh/npm/dm/@riophae/vue-treeselect)

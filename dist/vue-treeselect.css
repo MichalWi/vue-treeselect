@@ -1,7 +1,7 @@
 /*!
- * vue-treeselect v0.4.1 | (c) 2017-2021 Riophae Lee
+ * vue-treeselect v0.4.2 | (c) 2017-2021 Riophae Lee
  * Released under the MIT License.
- * https://vue-treeselect.js.org/
+ * https://github.com/MichalWi/vue-treeselect
  */
 /**
  * Dependencies
@@ -94,6 +94,7 @@
   display: table;
   table-layout: fixed;
   width: 100%;
+  cursor: pointer;
   height: 36px;
   border: 1px solid #ddd;
   border-radius: 5px;

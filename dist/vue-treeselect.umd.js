@@ -1,7 +1,7 @@
 /*!
- * vue-treeselect v0.4.1 | (c) 2017-2021 Riophae Lee
+ * vue-treeselect v0.4.2 | (c) 2017-2021 Riophae Lee
  * Released under the MIT License.
- * https://vue-treeselect.js.org/
+ * https://github.com/MichalWi/vue-treeselect
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -2784,11 +2784,14 @@ var instanceId = 0;
 
       if (this.multiple) {
         this.forest.checkedStateMap[deselectedNode.id] = UNCHECKED;
-        this.traverseDescendantsDFS(deselectedNode, function (descendant) {
-          if (!descendant.isDisabled || _this15.allowSelectingDisabledDescendants) {
-            _this15.forest.checkedStateMap[descendant.id] = UNCHECKED;
-          }
-        });
+
+        if (this.autoDeselectDescendants) {
+          this.traverseDescendantsDFS(deselectedNode, function (descendant) {
+            if (!descendant.isDisabled || _this15.allowSelectingDisabledDescendants) {
+              _this15.forest.checkedStateMap[descendant.id] = UNCHECKED;
+            }
+          });
+        }
       }
     },
     enhancedNormalizer: function enhancedNormalizer(raw) {
@@ -5136,7 +5139,7 @@ var style = __webpack_require__(39);
 /* harmony default export */ var src = __webpack_exports__["default"] = (Treeselect);
 
 
-var VERSION = "0.4.1";
+var VERSION = "0.4.2";
 
 /***/ })
 /******/ ]);
