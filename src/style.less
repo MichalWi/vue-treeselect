@@ -773,12 +773,13 @@
 
 .vue-treeselect__option {
   .row();
+  position: relative;
 }
 
 .vue-treeselect__option--highlight {
   background: @treeselect-option-bg-highlight;
 }
-.vue-treeselect__option.clearfix::before{
+.vue-treeselect__option.clearfix::before {
   content: unset;
 }
 
@@ -794,10 +795,6 @@
   }
 }
 
-.vue-treeselect__option { 
-  position: relative; 
-}
-
 .vue-treeselect__option--hide {
   display: none;
 }
@@ -809,16 +806,16 @@
 
 .vue-treeselect__option-arrow-container {
   // Wiserskills change
-  display: block !important;
+  display: block;
   background-color: transparent;
   border: 0;
-  height: 28px !important;
-  width: 20px !important;
-  float: left !important;
+  height: 22px;
+  width: 20px;
+  float: left;
   // end change
   .clickable();
 }
-.vue-treeselect__option-arrow-placeholder{
+.vue-treeselect__option-arrow-placeholder {
   // Wiserskills change
   // end change
 }
@@ -863,11 +860,10 @@
   .clickable();
 
   display: table;
-  width: 100%;
   table-layout: fixed;
   color: @treeselect-option-label-color;
   // Wiserskills change
-  width: calc(100% - 20px) !important; 
+  width: calc(100% - 20px);
   float: left;
   // end change
 
