@@ -1068,10 +1068,14 @@ export default {
         nextSelectedNodeIds = nodeIdListOfPrevValue
       } else if (this.valueConsistsOf === BRANCH_PRIORITY || this.flat) {
         nodeIdListOfPrevValue.forEach(nodeId => {
-          nextSelectedNodeIds.push(nodeId)
+          if (nextSelectedNodeIds.indexOf(nodeId) === -1) {
+            nextSelectedNodeIds.push(nodeId)
+          }
           const node = this.getNode(nodeId)
           if (node.isBranch) this.traverseDescendantsBFS(node, descendant => {
-            nextSelectedNodeIds.push(descendant.id)
+            if (nextSelectedNodeIds.indexOf(descendant.id) === -1) {
+              nextSelectedNodeIds.push(descendant.id)
+            }
           })
         })
       } else if (this.valueConsistsOf === LEAF_PRIORITY) {

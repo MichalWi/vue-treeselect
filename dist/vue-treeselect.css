@@ -1,5 +1,5 @@
 /*!
- * vue-treeselect v0.4.2 | (c) 2017-2021 Riophae Lee
+ * vue-treeselect v0.4.3 | (c) 2017-2021 Riophae Lee
  * Released under the MIT License.
  * https://github.com/MichalWi/vue-treeselect
  */
@@ -560,6 +560,7 @@
   display: table;
   table-layout: fixed;
   width: 100%;
+  position: relative;
 }
 .vue-treeselect__option--highlight {
   background: #f5f5f5;
@@ -574,9 +575,6 @@
 .vue-treeselect--single .vue-treeselect__option--selected:hover {
   background: #e3f2fd;
 }
-.vue-treeselect__option {
-  position: relative;
-}
 .vue-treeselect__option--hide {
   display: none;
 }
@@ -589,12 +587,12 @@
   line-height: 0;
 }
 .vue-treeselect__option-arrow-container {
-  display: block !important;
+  display: block;
   background-color: transparent;
   border: 0;
-  height: 28px !important;
-  width: 20px !important;
-  float: left !important;
+  height: 22px;
+  width: 20px;
+  float: left;
   cursor: pointer;
 }
 .vue-treeselect__option-arrow {
@@ -636,10 +634,9 @@
   vertical-align: middle;
   cursor: pointer;
   display: table;
-  width: 100%;
   table-layout: fixed;
   color: inherit;
-  width: calc(100% - 20px) !important;
+  width: calc(100% - 20px);
   float: left;
 }
 .vue-treeselect__option--disabled .vue-treeselect__label-container {

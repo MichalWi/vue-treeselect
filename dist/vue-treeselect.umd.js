@@ -1,5 +1,5 @@
 /*!
- * vue-treeselect v0.4.2 | (c) 2017-2021 Riophae Lee
+ * vue-treeselect v0.4.3 | (c) 2017-2021 Riophae Lee
  * Released under the MIT License.
  * https://github.com/MichalWi/vue-treeselect
  */
@@ -2341,12 +2341,16 @@ var instanceId = 0;
         nextSelectedNodeIds = nodeIdListOfPrevValue;
       } else if (this.valueConsistsOf === BRANCH_PRIORITY || this.flat) {
         nodeIdListOfPrevValue.forEach(function (nodeId) {
-          nextSelectedNodeIds.push(nodeId);
+          if (nextSelectedNodeIds.indexOf(nodeId) === -1) {
+            nextSelectedNodeIds.push(nodeId);
+          }
 
           var node = _this6.getNode(nodeId);
 
           if (node.isBranch) _this6.traverseDescendantsBFS(node, function (descendant) {
-            nextSelectedNodeIds.push(descendant.id);
+            if (nextSelectedNodeIds.indexOf(descendant.id) === -1) {
+              nextSelectedNodeIds.push(descendant.id);
+            }
           });
         });
       } else if (this.valueConsistsOf === LEAF_PRIORITY) {
@@ -3412,12 +3416,12 @@ var babel_helper_vue_jsx_merge_props_default = /*#__PURE__*/__webpack_require__.
 
 var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HOME, KEY_CODES.ARROW_LEFT, KEY_CODES.ARROW_UP, KEY_CODES.ARROW_RIGHT, KEY_CODES.ARROW_DOWN];
 /* harmony default export */ var Inputvue_type_script_lang_js_ = ({
-  name: "vue-treeselect--input",
-  inject: ["instance"],
+  name: 'vue-treeselect--input',
+  inject: ['instance'],
   data: function data() {
     return {
       inputWidth: MIN_INPUT_WIDTH,
-      value: ""
+      value: ''
     };
   },
   computed: {
@@ -3432,7 +3436,7 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
     }
   },
   watch: {
-    "instance.trigger.searchQuery": function instanceTriggerSearchQuery(newValue) {
+    'instance.trigger.searchQuery': function instanceTriggerSearchQuery(newValue) {
       this.value = newValue;
     },
     value: function value() {
@@ -3449,7 +3453,7 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
     clear: function clear() {
       this.onInput({
         target: {
-          value: ""
+          value: ''
         }
       });
     },
@@ -3492,7 +3496,7 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
     },
     onKeyDown: function onKeyDown(evt) {
       var instance = this.instance;
-      var key = "which" in evt ? evt.which : evt.keyCode;
+      var key = 'which' in evt ? evt.which : evt.keyCode;
       if (evt.ctrlKey || evt.shiftKey || evt.altKey || evt.metaKey) return;
 
       if (!instance.menu.isOpen && includes(keysThatRequireMenuBeingOpen, key)) {
@@ -3624,7 +3628,7 @@ var keysThatRequireMenuBeingOpen = [KEY_CODES.ENTER, KEY_CODES.END, KEY_CODES.HO
             blur: this.onBlur,
             keydown: this.onKeyDown
           },
-          ref: "input"
+          ref: 'input'
         });
       }
 
@@ -5139,7 +5143,7 @@ var style = __webpack_require__(39);
 /* harmony default export */ var src = __webpack_exports__["default"] = (Treeselect);
 
 
-var VERSION = "0.4.2";
+var VERSION = "0.4.3";
 
 /***/ })
 /******/ ]);
