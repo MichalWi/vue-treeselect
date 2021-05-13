@@ -1,5 +1,5 @@
 /*!
- * vue-treeselect v0.4.3 | (c) 2017-2021 Riophae Lee
+ * vue-treeselect v0.4.4 | (c) 2017-2021 Riophae Lee
  * Released under the MIT License.
  * https://github.com/MichalWi/vue-treeselect
  */
@@ -2349,7 +2349,9 @@ var instanceId = 0;
 
           if (node.isBranch) _this6.traverseDescendantsBFS(node, function (descendant) {
             if (nextSelectedNodeIds.indexOf(descendant.id) === -1) {
-              nextSelectedNodeIds.push(descendant.id);
+              if (!descendant.isDisabled) {
+                nextSelectedNodeIds.push(descendant.id);
+              }
             }
           });
         });
@@ -5143,7 +5145,7 @@ var style = __webpack_require__(39);
 /* harmony default export */ var src = __webpack_exports__["default"] = (Treeselect);
 
 
-var VERSION = "0.4.3";
+var VERSION = "0.4.4";
 
 /***/ })
 /******/ ]);
