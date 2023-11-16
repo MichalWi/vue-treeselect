@@ -1,5 +1,5 @@
 /*!
- * vue-treeselect v0.4.4 | (c) 2017-2021 Riophae Lee
+ * vue-treeselect v0.4.4 | (c) 2017-2023 Riophae Lee
  * Released under the MIT License.
  * https://github.com/MichalWi/vue-treeselect
  */
@@ -2349,7 +2349,7 @@ var instanceId = 0;
 
           if (node.isBranch) _this6.traverseDescendantsBFS(node, function (descendant) {
             if (nextSelectedNodeIds.indexOf(descendant.id) === -1) {
-              if (!descendant.isDisabled) {
+              if (!descendant.isDisabled && _this6.forest.selectedNodeIds.indexOf(descendant.id) !== -1) {
                 nextSelectedNodeIds.push(descendant.id);
               }
             }
