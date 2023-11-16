@@ -14,12 +14,12 @@
   // We just use `setTimeout()` here to simulate an async operation
   // instead of requesting a real API server for demo purpose.
   const simulateAsyncOperation = fn => {
-    setTimeout(fn, 2000)
+    setTimeout(fn, 500)
   }
 
   export default {
     data: () => ({
-      value: null,
+      value: [ 'child1' ],
       options: [ {
         id: 'success',
         label: 'With children',
@@ -47,8 +47,11 @@
           case 'success': {
             simulateAsyncOperation(() => {
               parentNode.children = [ {
-                id: 'child',
-                label: 'Child option',
+                id: 'child1',
+                label: 'Child option 1',
+              }, {
+                id: 'child2',
+                label: 'Child option 2',
               } ]
               callback()
             })

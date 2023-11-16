@@ -1074,7 +1074,7 @@ export default {
           const node = this.getNode(nodeId)
           if (node.isBranch) this.traverseDescendantsBFS(node, descendant => {
             if (nextSelectedNodeIds.indexOf(descendant.id) === -1) {
-              if (!descendant.isDisabled){
+              if (!descendant.isDisabled && this.forest.selectedNodeIds.indexOf(descendant.id) !== -1) {
                 nextSelectedNodeIds.push(descendant.id)
               }
             }
